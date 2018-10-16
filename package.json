@@ -13,6 +13,8 @@
     "react-navigation": "^2.18.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/runtime": "^7.1.2",
     "babel-jest": "23.6.0",
     "babel-preset-react-native": "^2.1.0",
     "jest": "23.6.0",
