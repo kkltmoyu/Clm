@@ -32,6 +32,7 @@ import {
 import { TabNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+
 class MyHomeScreen extends React.Component {
     static navigationOptions = {
         tabBarLabel: 'Home',
