@@ -2,7 +2,7 @@ let utils = {
 
 }
 
-utils.mapBottomIcons = (state)=>{
+utils.mapBottomIcons = (routeName,state)=>{
 	let iconName=''
 	if (routeName === 'Home') {
         iconName = `ios-information-circle${state ? '' : '-outline'}`;
