@@ -2,12 +2,15 @@ import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import Stack from './Stack'
 import Main from '../components/Main/Main'
 import Order from '../components/Order/Order'
 import Mine from '../components/Mine/Mine'
+
 import utils from '../util'
 export default createBottomTabNavigator({
-    Home: Main,
+    Home: Stack,
+    // Home:Main,
     Order: Order,
     Mine: Mine,
 }, {

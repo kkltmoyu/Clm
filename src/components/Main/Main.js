@@ -37,6 +37,9 @@ class Main extends Component {
             <Button onPress={()=>{
               this.props.navigation.navigate('Order')
             }} title='Go to order'></Button>
+            <Button onPress={()=>{
+              this.props.navigation.navigate('One')
+            }} title='wang'></Button>
             <Text style={styles.counter}>{this.props.counter.count}</Text>
             <TouchableOpacity style={styles.reset} onPress={()=>this._onPressReset()}>
               <Text>归零</Text>
