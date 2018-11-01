@@ -17,6 +17,9 @@ class Main extends Component {
       amount : 3
     } 
   }
+  componentDidMount(){
+    // this.getData()
+  }
    _onPressReset() {
     this.props.dispatch(reset());
   }
@@ -30,10 +33,26 @@ class Main extends Component {
   _onPressDec() {
     this.props.dispatch(decrease());
   }
+  getData(){
+     fetch('http://api.map.baidu.com/place/v2/suggestion?query=天&region=北京市&city_limit=true&output=json&ak=WrXbRe8gO1bFqqMUwj6PHgcnBQBO6Lpj')
+    .then(response => {
+      return response.json()
+    })
+    .then(responseJson => {
+         debugger
+         console.log(responseJson)
+      return true;
+    })
+    .catch(error => {
+      debugger
+      console.error(error);
+    });
+  }
     render() {
         return (
           <View style={styles.container}>
             <Text>Main111</Text>
+            <Button onPress={this.getData} title='getData'></Button>
             <Button onPress={()=>{
               this.props.navigation.navigate('Order')
             }} title='Go to order'></Button>

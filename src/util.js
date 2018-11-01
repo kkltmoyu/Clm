@@ -31,4 +31,15 @@ utils.makeRequest = (config) => {
     return request;
 }
 
+utils.makeFetch = (config) =>{
+    return fetch('http://api.map.baidu.com/place/v2/suggestion?query=天&region=北京市&city_limit=true&output=json&ak=WrXbRe8gO1bFqqMUwj6PHgcnBQBO6Lpj')
+    .then(response => response.json())
+    .then(responseJson => {
+      return responseJson.movies;
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
 export default utils
