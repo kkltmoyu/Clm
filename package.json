@@ -20,6 +20,7 @@
     "babel-jest": "23.6.0",
     "babel-preset-react-native": "^2.1.0",
     "jest": "23.6.0",
+    "merge": "^1.2.1",
     "metro-react-native-babel-preset": "0.48.0",
     "react-redux": "^5.0.7",
     "react-test-renderer": "16.5.0",
