@@ -1,8 +1,10 @@
 import React,{Component} from 'react'
-import {Button} from 'react-native'
+import {Button,View} from 'react-native'
 class One extends React.Component {
   static navigationOptions = {
-    drawerLabel: 'One',
+    title: 'One1',
+    //单个页面无页眉
+    header: null,
     // drawerIcon: ({ tintColor }) => (
     //   <Image
     //     source={require('./chats-icon.png')}
@@ -13,10 +15,16 @@ class One extends React.Component {
 
   render() {
     return (
-      <Button
-        onPress={() => this.props.navigation.navigate('Two')}
-        title="Go to Two"
-      />
+      <View>
+        <Button
+          onPress={() => this.props.navigation.navigate('Two')}
+          title="Go to Two"
+        />
+        <Button
+          onPress={() => this.props.navigation.navigate('Login')}
+          title="Go to Login"
+        />
+      </View>
     );
   }
 }

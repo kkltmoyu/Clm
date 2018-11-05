@@ -1,12 +1,10 @@
 import React,{Component} from 'react'
 import {Button} from 'react-native'
-class Two extends React.Component {
+class Login extends React.Component {
   static navigationOptions = {
-    title: 'Two1',
+    title: 'LoginModal',
     //单个页面无页眉
     header: null,
-    //禁用返回header
-    headerBackTitle:null,
     // drawerIcon: ({ tintColor }) => (
     //   <Image
     //     source={require('./chats-icon.png')}
@@ -14,15 +12,14 @@ class Two extends React.Component {
     //   />
     // ),
   };
-
   render() {
     return (
       <Button
-        onPress={() => this.props.navigation.goBack()}
-        title="Go back One"
+        onPress={() => this.props.navigation.navigate('Two')}
+        title="Go to Two"
       />
     );
   }
 }
 
-export default Two;
+export default Login;

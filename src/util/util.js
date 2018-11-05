@@ -1,3 +1,4 @@
+import _ from 'lodash'
 let utils = {
 
 }
@@ -15,20 +16,26 @@ utils.mapBottomIcons = (routeName,state)=>{
 //构造request请求
 utils.makeRequest = (config) => {
     //url可根据环境配置或者config传入
-    const basicUrl = '192.168.1.100:8082'
-    // var basicUrl = 'http://10.75.137.41:8080';
-    config.url = basicUrl + config.url;
+    const basicUrl = 'http://172.30.113.47:3333'
+    let url = basicUrl + '/' + config.url;
 
     const defaults = {
-        method: 'get',
-        // headers: {
-        //     'token': getAccessToken()
-        // },
+        method: 'GET',
+        // body: JSON.stringify(data), // must match 'Content-Type' header
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        // credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+          'content-type': 'application/json'
+        },
+        mode: 'cors', // no-cors, cors, *same-origin
+        // redirect: 'follow', // manual, *follow, error
+        // referrer: 'no-referrer', // *client, no-referrer
     };
     const request = _.merge(defaults, config);
     // const ax = this.$axios(request);
     // return ax;
-    return request;
+    delete request['url']
+    return fetch(url,request)
 }
 
 utils.makeFetch = (config) =>{

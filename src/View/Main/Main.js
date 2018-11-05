@@ -9,8 +9,12 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { increase, decrease, reset } from '../../store/actions/actions';
+import utils from '../../util/util'
 
 class Main extends Component {
+  static navigationOptions = {
+    title: 'tt1',
+  };
   constructor(props){
     super(props);
     this.state = {
@@ -33,7 +37,7 @@ class Main extends Component {
   _onPressDec() {
     this.props.dispatch(decrease());
   }
-  getData(){
+  getBDData(){
      fetch('http://api.map.baidu.com/place/v2/suggestion?query=天&region=北京市&city_limit=true&output=json&ak=WrXbRe8gO1bFqqMUwj6PHgcnBQBO6Lpj')
     .then(response => {
       return response.json()
@@ -48,17 +52,56 @@ class Main extends Component {
       console.error(error);
     });
   }
+  getData(){
+    utils.makeRequest({
+      url:'getOne'
+    })
+    .then(response => {
+      console.log('response:',response)
+      return response.json()
+    })
+    .then(responseJson => {
+         // debugger
+         console.log('responseJson:',responseJson)
+      return true;
+    })
+    .catch(error => {
+      debugger
+      console.error(error);
+    });
+  }
+  postData(){
+    utils.makeRequest({
+      url:'sendP',
+      method:'POST'
+    })
+    .then(response => {
+      console.log('response:',response)
+      return response.json()
+    })
+    .then(responseJson => {
+         // debugger
+         console.log('responseJson:',responseJson)
+      return true;
+    })
+    .catch(error => {
+      debugger
+      console.error(error);
+    });
+  }
     render() {
         return (
           <View style={styles.container}>
             <Text>Main111</Text>
-            <Button onPress={this.getData} title='getData'></Button>
+            <Button onPress={this.getBDData} title='fetchbaidu'></Button>
+            <Button onPress={this.getData} title='fetchget'></Button>
+            <Button onPress={this.postData} title='fetchpost'></Button>
             <Button onPress={()=>{
               this.props.navigation.navigate('Order')
             }} title='Go to order'></Button>
             <Button onPress={()=>{
               this.props.navigation.navigate('One')
-            }} title='wang'></Button>
+            }} title='go to one'></Button>
             <Text style={styles.counter}>{this.props.counter.count}</Text>
             <TouchableOpacity style={styles.reset} onPress={()=>this._onPressReset()}>
               <Text>归零</Text>
