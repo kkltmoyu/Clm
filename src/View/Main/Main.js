@@ -85,7 +85,6 @@ class Main extends Component {
       return true;
     })
     .catch(error => {
-      debugger
       console.error(error);
     });
   }
@@ -93,9 +92,9 @@ class Main extends Component {
         return (
           <View style={styles.container}>
             <Text>Main111</Text>
-            <Button onPress={this.getBDData} title='fetchbaidu'></Button>
+            {/*<Button onPress={this.getBDData} title='fetchbaidu'></Button>
             <Button onPress={this.getData} title='fetchget'></Button>
-            <Button onPress={this.postData} title='fetchpost'></Button>
+            <Button onPress={this.postData} title='fetchpost'></Button>*/}
             <Button onPress={()=>{
               this.props.navigation.navigate('Order')
             }} title='Go to order'></Button>
