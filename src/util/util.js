@@ -54,25 +54,25 @@ utils.makeFetch = (config) => {
 }
 
 /*-----------AsyncStorage部分-----------start*/
-utils.getItem(key) {
+utils.getItem = (key) => {
     return AsyncStorage.getItem(key).then((value) => {
         const jsonValue = JSON.parse(value);
         return jsonValue;
     });
 }
 
-utils.saveItem(key, value) {
+utils.saveItem = (key, value) => {
     return AsyncStorage.setItem(key, JSON.stringify(value));
 }
 
-utils.updateItem(key, value) {
+utils.updateItem = (key, value) => {
     return DeviceStorage.get(key).then((item) => {
         value = typeof value === 'string' ? value : Object.assign({}, item, value);
         return AsyncStorage.setItem(key, JSON.stringify(value));
     });
 }
 
-utils.deleteItem(key) {
+utils.deleteItem = (key) => {
     return AsyncStorage.removeItem(key);
 }
 /*-----------AsyncStorage部分-----------end*/
