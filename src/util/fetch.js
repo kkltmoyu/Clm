@@ -5,7 +5,7 @@ import {
 export default async(url = '', data = {}, type = 'GET',needBasicUrl = true) => {
     type = type.toUpperCase();
     if (needBasicUrl)
-    	url = basicUrl + url;
+    	url = basicUrl + '/' + url;
 
     if (type === 'GET') {
         let dataStr = '';
@@ -27,7 +27,8 @@ export default async(url = '', data = {}, type = 'GET',needBasicUrl = true) => {
             'Content-Type': 'application/json'
         },
         mode: "cors",
-        cache: "force-cache"
+        // cache: "force-cache"
+        cache: "no-cache"
     }
 
     if (type === 'POST') {
