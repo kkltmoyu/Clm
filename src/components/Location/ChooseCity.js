@@ -9,10 +9,6 @@ import {
 } from 'react-native';
 
 class ChooseCity extends Component {
-    static navigationOptions = {
-        title: '请选择所在城市',
-    };
-
     constructor(props) {
         super(props);
         this.state = {
