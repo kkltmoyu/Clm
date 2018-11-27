@@ -6,7 +6,7 @@ import {
     ScrollView,
 } from 'react-native';
 import { Button,SearchBar } from 'react-native-elements'
-import {locateSketchy} from '../../service/getData'
+import { locateSketchy } from '../../service/getData'
 
 class Location extends Component {
     // static navigationOptions = {
@@ -32,9 +32,9 @@ class Location extends Component {
         let address = []
         for(let i = 0;i<10;i++){
             address.push({
-                address:'address1',
-                userName:'user1',
-                mobile:'mobile1'
+                address:`address${i}`,
+                userName:`user${i}`,
+                mobile:`mobile${i}`
             })
         }
         return address
@@ -74,8 +74,7 @@ class Location extends Component {
         this.props.navigation.navigate('ChooseCity')
     }
     render() {
-        // alert(this.state.addressList)
-        let list = this.state.addressList.map((item) =><View><Text style={styles.addressTitle}>{item.address}</Text><View style={styles.addressContact}><Text style={styles.addressUsername}>{item.mobile}</Text><Text style={styles.addressMobile}>{}</Text></View>)
+        let addressList = this.state.addressList.map((item) =><View><Text style={styles.addressTitle}>{item.address}</Text><View style={styles.addressContact}><Text style={styles.addressUsername}>{item.userName}</Text><Text style={styles.addressMobile}>{item.mobile}</Text></View></View>)
         return(
             <View style = { styles.container }>
                 <View style={styles.selectWrapper}>
@@ -92,7 +91,7 @@ class Location extends Component {
                 <View style={styles.addressList}>
                     <Text style={styles.title}>收货地址</Text>
                     <ScrollView>
-                       {list}
+                       {addressList}
                     </ScrollView>
                 </View>
             </View>
