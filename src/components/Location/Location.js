@@ -74,7 +74,7 @@ class Location extends Component {
         this.props.navigation.navigate('ChooseCity')
     }
     render() {
-        let addressList = this.state.addressList.map((item) =><View><Text style={styles.addressTitle}>{item.address}</Text><View style={styles.addressContact}><Text style={styles.addressUsername}>{item.userName}</Text><Text style={styles.addressMobile}>{item.mobile}</Text></View></View>)
+        let addressList = this.state.addressList.map((item) =><View key={item.address} style={styles.listContainer}><Text style={styles.addressTitle}>{item.address}</Text><View style={styles.addressContact}><Text style={styles.addressUsername}>{item.userName}</Text><Text style={styles.addressMobile}>{item.mobile}</Text></View></View>)
         return(
             <View style = { styles.container }>
                 <View style={styles.selectWrapper}>
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     },
     selectWrapper:{
         flex:1,
-        width:'100%',
         alignItems:'center',
         flexDirection: 'row',
         paddingRight:10,
@@ -150,6 +149,16 @@ const styles = StyleSheet.create({
     },
     addressUsername:{
         color:'rgba(0, 0, 0,0.7)',
+    },
+    currentPosition:{
+        paddingLeft:10
+    },
+    listContainer:{
+        paddingTop:5,
+        paddingLeft:10,
+        paddingBottom:5,
+        borderBottomColor:'#EEEEE0',
+        borderBottomWidth:1,
     }
 })
 

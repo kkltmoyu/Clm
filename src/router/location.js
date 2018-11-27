@@ -13,7 +13,9 @@ export default createStackNavigator({
 	ChooseCity: {
 	  screen: ChooseCity,
     navigationOptions: () => ({
-      title: '请选择所在城市',
+      // headerMode:'none',
+      header: null,
+      // title: '请选择所在城市',
     }),
 	},
 },
