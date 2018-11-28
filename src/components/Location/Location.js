@@ -61,7 +61,7 @@ class Location extends Component {
                 })
             }
             else if(res.code === 200){
-                const city = res.addressDetail.city
+                const city = res.city.name
                 this.setState({
                     currentCity:city
                 })

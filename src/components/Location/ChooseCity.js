@@ -3,11 +3,10 @@ import {
     AppRegistry,
     Text,
     View,
-    Button,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import { SearchBar } from 'react-native-elements'
+import { Button,SearchBar } from 'react-native-elements'
 
 class ChooseCity extends Component {
     constructor(props) {
@@ -25,19 +24,38 @@ class ChooseCity extends Component {
     }
 
     render() {
+        let rowOne = [],
+            rowTwo = [],
+            rowThree = [],
+            rowTextOne = ''
+        if(this.state.hotCity.length === 9 ){
+            rowOne = this.state.hotCity.slice(0,3)
+            rowTwo = this.state.hotCity.slice(3,6)
+            rowThree = this.state.hotCity.slice(6)
+            rowTextOne = rowOne.map((item) => <Text key={item} styles='oneHotCity'>{item}</Text>)
+            rowTextTwo = rowTwo.map((item) => <Text key={item} styles='oneHotCity'>{item}</Text>)
+            rowTextThree = rowThree.map((item) => <Text key={item} styles='oneHotCity'>{item}</Text>)
+        }
         return(
             <View style = { styles.chooseCityContainer }>
                 <View style={styles.header}>
-                    <SearchBar style={styles.searchBar} placeholder='输入城市名' value={this.state.inputCity}></SearchBar>
+                    <SearchBar containerStyle={styles.searchBarInput} placeholder='输入城市名' value={this.state.inputCity}></SearchBar>
                     <Button style={styles.cancelBtn} title='取消' onPress={this.returnPage}/>
                 </View>
                 <View style={styles.hotCity}>
-                    {/*<SearchBar style={styles.SearchBar}></SearchBar>
-                    <Button style={styles.cancelBtn} title='取消' />*/}
+                    <Text style={styles.title}>热门城市</Text>
+                    <View style={styles.row}>
+                        {rowTextOne}
+                    </View>
+                    <View style={styles.row}>
+                        {rowTextTwo}
+                    </View>
+                    <View style={styles.row}>
+                        {rowTextThree}
+                    </View>
                 </View>
                 <View style={styles.cityList}>
-                    {/*<SearchBar style={styles.SearchBar}></SearchBar>
-                    <Button style={styles.cancelBtn} title='取消' />*/}
+
                 </View>
             </View>
         );
@@ -47,6 +65,7 @@ class ChooseCity extends Component {
 const styles = StyleSheet.create({
     chooseCityContainer:{
         flex: 1,
+        backgroundColor:'#ffffff',
     },
     header:{
         flex:1,
@@ -54,19 +73,35 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-around',
     },
-    searchBar:{
-        flex:6
+    searchBarInput:{
+        flex:4
+    },
+    title:{
+        color:'rgb(241, 243, 244)',
     },
     cancelBtn:{
         marginLeft:10,
-        flex:3
+        flex:1
     },
     hotCity:{
-        flex:3
+        flex:2
     },
     cityList:{
         flex:4
-    }
+    },
+    row:{
+        flex:1,
+        paddingLeft:10,
+        paddingTop:5,
+        paddingBottom:5,
+        flexDirection:'row',
+        justifyContent:'space-around',
+    },
+    oneHotCity:{
+        flex:1,
+        color:'#000',
+        // backgroundColor:'rgba(23, 35, 61, 0.06)',
+    },
 })
 
 export default ChooseCity;

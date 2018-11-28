@@ -22,7 +22,7 @@ export default createStackNavigator({
   {
   	//整个stack路由无header
     headerMode:'screen',
-    initialRouteName: 'Location',
+    initialRouteName: 'ChooseCity',
     // headerBackTitleVisible:false,
   }
 );
