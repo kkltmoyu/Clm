@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {
-    AppRegistry,
     Text,
     View,
     StyleSheet,
-    TouchableOpacity
+    SectionList,
 } from 'react-native';
 import { Button,SearchBar } from 'react-native-elements'
+import { getCitiesByChar } from '../../service/getData'
 
 class ChooseCity extends Component {
     constructor(props) {
@@ -14,13 +14,30 @@ class ChooseCity extends Component {
         this.state = {
             hotCity:['上海','杭州','北京','广州','天津','南京','武汉','苏州','福州'],
             inputCity:'',
+            // firstCharacters:[],
+            cities:[]
         }
         this.returnPage = this.returnPage.bind(this)
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.getAllCities()
+    }
     returnPage(){
         this.props.navigation.navigate('Location')
+    }
+
+    getAllCities(){
+        getCitiesByChar().then((res) => {
+            if(res.code === 200){
+                let cities = res.data
+                this.setState({
+                    cities:cities
+                })
+            }
+        }).catch((e)=>{
+            console.log('获取城市列表失败')
+        })
     }
 
     render() {
@@ -55,7 +72,13 @@ class ChooseCity extends Component {
                     </View>
                 </View>
                 <View style={styles.cityList}>
-
+                    <SectionList
+                      renderItem={({ item, index, section }) => <Text key={index}>{item.name}</Text>}
+                      renderSectionHeader={({ section: { title } }) => (
+                        <Text style={styles.sectionHeader}>{title}</Text>
+                      )}
+                      sections={this.state.cities}
+                    />
                 </View>
             </View>
         );
@@ -72,6 +95,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-around',
+        paddingLeft:10,
     },
     searchBarInput:{
         flex:4
@@ -101,6 +125,21 @@ const styles = StyleSheet.create({
         flex:1,
         color:'#000',
         // backgroundColor:'rgba(23, 35, 61, 0.06)',
+    },
+    sectionHeader: {
+        paddingTop: 2,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 2,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color:'red',
+        backgroundColor: 'rgba(247,247,247,1.0)',
+    },
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
     },
 })
 

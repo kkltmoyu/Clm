@@ -8,6 +8,6 @@ export const locateSketchy = () =>{
 	// })
 }
 
-export const getCitiesList = () =>{
-	return fetch('city/list')
+export const getCitiesByChar = () =>{
+	return fetch('city/getAllByChar')
 }

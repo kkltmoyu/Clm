@@ -18,7 +18,7 @@ class Location extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentCity :'',
+            currentCityInfo : {},
             inputDetailAddress:'',
             currentAddress:'currentcurrentAddress',
             addressList:[]
@@ -26,6 +26,7 @@ class Location extends Component {
         this.inputChange = this.inputChange.bind(this)
         this.getCitySketch = this.getCitySketch.bind(this)
         this.chooseCity = this.chooseCity.bind(this)
+        this.chooseAddress = this.chooseAddress.bind(this)
         this.makeAddressInfo = this.makeAddressInfo.bind(this)
     }
     makeAddressInfo(){
@@ -57,28 +58,34 @@ class Location extends Component {
             if(res.code === 500){
                 console.log('定位失败')
                 this.setState({
-                    currentCity:'北京'
+                    currentCityInfo:{
+                        name:'北京'
+                    }
                 })
             }
             else if(res.code === 200){
-                const city = res.city.name
+                const city = res.data.city
                 this.setState({
-                    currentCity:city
+                    currentCityInfo:city
                 })
             }
         }).catch((e)=>{
-            alert(e)
+            console.log('获取当前城市失败')
         })
     }
     chooseCity(){
         this.props.navigation.navigate('ChooseCity')
     }
+    chooseAddress){
+        this.props.navigation.navigate('ChooseAddress')
+    }
     render() {
+        let currentCity = this.state.currentCityInfo.name ? this.state.currentCityInfo.name : ''
         let addressList = this.state.addressList.map((item) =><View key={item.address} style={styles.listContainer}><Text style={styles.addressTitle}>{item.address}</Text><View style={styles.addressContact}><Text style={styles.addressUsername}>{item.userName}</Text><Text style={styles.addressMobile}>{item.mobile}</Text></View></View>)
         return(
             <View style = { styles.container }>
                 <View style={styles.selectWrapper}>
-                    <Button style={styles.cityBtn} title={this.state.currentCity} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
+                    <Button style={styles.cityBtn} title={currentCity} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
                     <SearchBar containerStyle={styles.searchBarWrapper}
                         onChangeText={this.inputChange}
                         placeholder='小区/写字楼/学校 等'
