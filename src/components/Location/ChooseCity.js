@@ -4,23 +4,27 @@ import {
     View,
     StyleSheet,
     SectionList,
+    TouchableOpacity,
 } from 'react-native';
 import { Button,SearchBar } from 'react-native-elements'
-import { getCitiesByChar } from '../../service/getData'
+import { getCitiesByChar,getHotCities } from '../../service/getData'
 
 class ChooseCity extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hotCity:['上海','杭州','北京','广州','天津','南京','武汉','苏州','福州'],
+            hotCity:[],
             inputCity:'',
             cities:[]
         }
         this.returnPage = this.returnPage.bind(this)
+        this.getHotCitiesList = this.getHotCitiesList.bind(this)
+        this.chooseItem = this.chooseItem.bind(this)
     }
 
     componentDidMount() {
         this.getAllCities()
+        this.getHotCitiesList()
     }
     returnPage(){
         this.props.navigation.navigate('Location')
@@ -38,19 +42,60 @@ class ChooseCity extends Component {
             console.log('获取城市列表失败')
         })
     }
-
+    getHotCitiesList(){
+        getHotCities().then((res) => {
+            if(res.code === 200){
+                this.setState({
+                    hotCity:res.data
+                })
+            }
+        }).catch((e)=>{
+            console.log('获取热门城市失败')
+        })
+    }
+    chooseItem(value){
+        console.log('chooseItem is ',value)
+    }
+    sectionComp(info){
+        let txt = info.section.key;
+        return <Text
+            style={styles.sectionHeader} key={txt}>{txt}</Text>
+    }
+    renderItem = (info) =>{ 
+        //console.log('info is ',info)
+        return <View>
+            {
+                info.section.data.map((item, i) => {
+                     //
+                    this.renderExpenseItem(item, i)
+                })
+            }
+        </View>
+       
+    }
+    renderExpenseItem(item, i) {
+        return <TouchableOpacity key={i} onPress={() => this.chooseItem(item)}>
+           <Text key={i} style={styles.sectionItem}>{item.name}</Text>
+        </TouchableOpacity>;
+    }
     render() {
         let rowOne = [],
             rowTwo = [],
             rowThree = [],
-            rowTextOne = ''
+            rowTextOne = '',
+            rowTextTwo = '',
+            rowTextThree = ''
+            hotCities = []
         if(this.state.hotCity.length === 9 ){
             rowOne = this.state.hotCity.slice(0,3)
             rowTwo = this.state.hotCity.slice(3,6)
             rowThree = this.state.hotCity.slice(6)
-            rowTextOne = rowOne.map((item) => <Text key={item} styles='oneHotCity'>{item}</Text>)
-            rowTextTwo = rowTwo.map((item) => <Text key={item} styles='oneHotCity'>{item}</Text>)
-            rowTextThree = rowThree.map((item) => <Text key={item} styles='oneHotCity'>{item}</Text>)
+            rowTextOne = rowOne.map((item) => <Text key={item.name} style={styles.oneHotCity}>{item.name}</Text>)
+            rowTextTwo = rowTwo.map((item) => <Text key={item.name} style={styles.oneHotCity}>{item.name}</Text>)
+            rowTextThree = rowThree.map((item) => <Text key={item.name} style={styles.oneHotCity}>{item.name}</Text>)
+            hotCities.push(<View key='rowOne' style={styles.row}>{rowTextOne}</View>)
+            hotCities.push(<View key='rowTwo' style={styles.row}>{rowTextTwo}</View>)
+            hotCities.push(<View key='rowThree' style={styles.row}>{rowTextThree}</View>)
         }
         return(
             <View style = { styles.chooseCityContainer }>
@@ -60,23 +105,14 @@ class ChooseCity extends Component {
                 </View>
                 <View style={styles.hotCity}>
                     <Text style={styles.title}>热门城市</Text>
-                    <View style={styles.row}>
-                        {rowTextOne}
-                    </View>
-                    <View style={styles.row}>
-                        {rowTextTwo}
-                    </View>
-                    <View style={styles.row}>
-                        {rowTextThree}
-                    </View>
+                    {hotCities}
                 </View>
                 <View style={styles.cityList}>
                     <SectionList
-                      renderItem={({ item, index, section }) => <Text key={index}>{item.name}</Text>}
-                      renderSectionHeader={({ section: { title } }) => (
-                        <Text style={styles.sectionHeader}>{title}</Text>
-                      )}
-                      sections={this.state.cities}
+                        renderItem={this.renderItem}
+                        renderSectionHeader={this.sectionComp}
+                        sections={this.state.cities}
+                        keyExtractor={(item, index) => item + index}
                     />
                 </View>
             </View>
@@ -134,8 +170,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color:'red',
         backgroundColor: 'rgba(247,247,247,1.0)',
+        //height: 50, textAlign: 'center', textAlignVertical: 'center', backgroundColor: '#9CEBBC', color: 'white', fontSize: 30 
     },
-    item: {
+    sectionItem: {
         padding: 10,
         fontSize: 18,
         height: 44,

@@ -51,7 +51,6 @@ class Location extends Component {
         this.setState({
             inputDetailAddress:value
         })
-        alert(value)
     }
     getCitySketch(){
         locateSketchy().then((res) => {
@@ -76,7 +75,7 @@ class Location extends Component {
     chooseCity(){
         this.props.navigation.navigate('ChooseCity')
     }
-    chooseAddress){
+    chooseAddress(){
         this.props.navigation.navigate('ChooseAddress')
     }
     render() {

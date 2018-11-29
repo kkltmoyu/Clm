@@ -3,11 +3,12 @@ import fetch from '../util/fetch'
 
 export const locateSketchy = () =>{
 	return fetch('city/sketch')
-	// return util.makeRequest({
-	// 	url:'city/sketch'
-	// })
 }
 
 export const getCitiesByChar = () =>{
 	return fetch('city/getAllByChar')
+}
+
+export const getHotCities = () =>{
+	return fetch('city/hotCities')
 }
