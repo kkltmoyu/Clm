@@ -14,7 +14,6 @@ class ChooseCity extends Component {
         this.state = {
             hotCity:['上海','杭州','北京','广州','天津','南京','武汉','苏州','福州'],
             inputCity:'',
-            // firstCharacters:[],
             cities:[]
         }
         this.returnPage = this.returnPage.bind(this)
