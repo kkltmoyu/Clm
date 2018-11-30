@@ -5,9 +5,16 @@ import {
     StyleSheet,
     SectionList,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Button,SearchBar } from 'react-native-elements'
+import { updateUserCity } from '../../store/actions/actions';
+// import * as actions from '../../store/actions/actions'
 import { getCitiesByChar,getHotCities } from '../../service/getData'
+import { bindActionCreators } from 'redux'
+
+const ScreenWidth = Dimensions.get('window').width;
 
 class ChooseCity extends Component {
     constructor(props) {
@@ -17,20 +24,15 @@ class ChooseCity extends Component {
             inputCity:'',
             cities:[]
         }
-        this.returnPage = this.returnPage.bind(this)
-        this.getHotCitiesList = this.getHotCitiesList.bind(this)
-        this.chooseItem = this.chooseItem.bind(this)
     }
-
     componentDidMount() {
         this.getAllCities()
         this.getHotCitiesList()
     }
-    returnPage(){
+    returnPage = () =>{
         this.props.navigation.navigate('Location')
     }
-
-    getAllCities(){
+    getAllCities = () =>{
         getCitiesByChar().then((res) => {
             if(res.code === 200){
                 let cities = res.data
@@ -42,7 +44,7 @@ class ChooseCity extends Component {
             console.log('获取城市列表失败')
         })
     }
-    getHotCitiesList(){
+    getHotCitiesList = () =>{
         getHotCities().then((res) => {
             if(res.code === 200){
                 this.setState({
@@ -53,50 +55,32 @@ class ChooseCity extends Component {
             console.log('获取热门城市失败')
         })
     }
-    chooseItem(value){
-        console.log('chooseItem is ',value)
+    chooseItem = (item) => {
+        this.props.updateUserCity({
+            city:item
+        });
+        this.returnPage()
     }
-    sectionComp(info){
+    sectionComp = (info) =>{
         let txt = info.section.key;
-        return <Text
-            style={styles.sectionHeader} key={txt}>{txt}</Text>
+        return <Text style={styles.sectionHeader} key={txt}>{txt}</Text>
     }
-    renderItem = (info) =>{ 
-        //console.log('info is ',info)
-        return <View>
-            {
-                info.section.data.map((item, i) => {
-                     //
-                    this.renderExpenseItem(item, i)
-                })
-            }
-        </View>
-       
-    }
-    renderExpenseItem(item, i) {
-        return <TouchableOpacity key={i} onPress={() => this.chooseItem(item)}>
-           <Text key={i} style={styles.sectionItem}>{item.name}</Text>
+    renderItem = ({item,index}) =>{ 
+        return <TouchableOpacity key={item.name} onPress={() => this.chooseItem(item)}>
+           <Text key={index} style={styles.sectionItem}>{item.name}</Text>
         </TouchableOpacity>;
     }
+    renderHotCities = () =>{
+        let cityItems = []
+        this.state.hotCity.map((item) =>{
+            cityItems.push(<View key={item.name} style={styles.oneHotCityWrapper}><TouchableOpacity key={item.name} onPress={() => this.chooseItem(item)}><Text style={styles.oneHotCity}>{item.name}</Text></TouchableOpacity></View>)
+        })
+        return <View  style={styles.hotCities}>
+            { cityItems }
+            </View>
+    }
     render() {
-        let rowOne = [],
-            rowTwo = [],
-            rowThree = [],
-            rowTextOne = '',
-            rowTextTwo = '',
-            rowTextThree = ''
-            hotCities = []
-        if(this.state.hotCity.length === 9 ){
-            rowOne = this.state.hotCity.slice(0,3)
-            rowTwo = this.state.hotCity.slice(3,6)
-            rowThree = this.state.hotCity.slice(6)
-            rowTextOne = rowOne.map((item) => <Text key={item.name} style={styles.oneHotCity}>{item.name}</Text>)
-            rowTextTwo = rowTwo.map((item) => <Text key={item.name} style={styles.oneHotCity}>{item.name}</Text>)
-            rowTextThree = rowThree.map((item) => <Text key={item.name} style={styles.oneHotCity}>{item.name}</Text>)
-            hotCities.push(<View key='rowOne' style={styles.row}>{rowTextOne}</View>)
-            hotCities.push(<View key='rowTwo' style={styles.row}>{rowTextTwo}</View>)
-            hotCities.push(<View key='rowThree' style={styles.row}>{rowTextThree}</View>)
-        }
+        const hotCities = this.renderHotCities()
         return(
             <View style = { styles.chooseCityContainer }>
                 <View style={styles.header}>
@@ -148,18 +132,21 @@ const styles = StyleSheet.create({
     cityList:{
         flex:4
     },
-    row:{
-        flex:1,
-        paddingLeft:10,
-        paddingTop:5,
-        paddingBottom:5,
-        flexDirection:'row',
-        justifyContent:'space-around',
+    hotCities:{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        paddingTop:20,
+    },
+    oneHotCityWrapper:{
+        justifyContent: 'center',
+        width: (ScreenWidth - 1) / 3,
+        height: 40,
+        alignItems: 'center',
     },
     oneHotCity:{
         flex:1,
         color:'#000',
-        // backgroundColor:'rgba(23, 35, 61, 0.06)',
     },
     sectionHeader: {
         paddingTop: 2,
@@ -170,7 +157,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color:'red',
         backgroundColor: 'rgba(247,247,247,1.0)',
-        //height: 50, textAlign: 'center', textAlignVertical: 'center', backgroundColor: '#9CEBBC', color: 'white', fontSize: 30 
     },
     sectionItem: {
         padding: 10,
@@ -179,4 +165,14 @@ const styles = StyleSheet.create({
     },
 })
 
-export default ChooseCity;
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateUserCity: bindActionCreators(updateUserCity, dispatch),
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ChooseCity);

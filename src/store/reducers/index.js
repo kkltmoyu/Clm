@@ -1,6 +1,6 @@
 import {combineReducers} from "redux"
-import counter from './count'
+import updateUser from './user'
 
 export default combineReducers({
-  counter:counter,
+  user:updateUser,
 })

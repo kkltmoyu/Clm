@@ -5,7 +5,10 @@ import {
     StyleSheet,
     ScrollView,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import { Button,SearchBar } from 'react-native-elements'
+import { updateUserCity } from '../../store/actions/actions';
 import { locateSketchy } from '../../service/getData'
 
 class Location extends Component {
@@ -23,13 +26,8 @@ class Location extends Component {
             currentAddress:'currentcurrentAddress',
             addressList:[]
         }
-        this.inputChange = this.inputChange.bind(this)
-        this.getCitySketch = this.getCitySketch.bind(this)
-        this.chooseCity = this.chooseCity.bind(this)
-        this.chooseAddress = this.chooseAddress.bind(this)
-        this.makeAddressInfo = this.makeAddressInfo.bind(this)
     }
-    makeAddressInfo(){
+    makeAddressInfo = () =>{
         let address = []
         for(let i = 0;i<10;i++){
             address.push({
@@ -47,44 +45,49 @@ class Location extends Component {
             addressList:address
         })
     }
-    inputChange(value){
+    inputChange = (value) =>{
         this.setState({
             inputDetailAddress:value
         })
     }
-    getCitySketch(){
+    getCitySketch = () =>{
         locateSketchy().then((res) => {
             if(res.code === 500){
                 console.log('定位失败')
-                this.setState({
-                    currentCityInfo:{
+                this.props.updateUserCity({
+                    city:{
                         name:'北京'
                     }
                 })
             }
             else if(res.code === 200){
                 const city = res.data.city
-                this.setState({
-                    currentCityInfo:city
+                this.props.updateUserCity({
+                    city:city
                 })
             }
         }).catch((e)=>{
             console.log('获取当前城市失败')
+            this.props.updateUserCity({
+                city: {
+                    name:'北京'
+                }
+            })
         })
     }
-    chooseCity(){
+    chooseCity = () => {
         this.props.navigation.navigate('ChooseCity')
     }
-    chooseAddress(){
+    chooseAddress = () => {
         this.props.navigation.navigate('ChooseAddress')
     }
     render() {
-        let currentCity = this.state.currentCityInfo.name ? this.state.currentCityInfo.name : ''
+        // let currentCity = this.state.currentCityInfo.name ? this.state.currentCityInfo.name : ''
         let addressList = this.state.addressList.map((item) =><View key={item.address} style={styles.listContainer}><Text style={styles.addressTitle}>{item.address}</Text><View style={styles.addressContact}><Text style={styles.addressUsername}>{item.userName}</Text><Text style={styles.addressMobile}>{item.mobile}</Text></View></View>)
         return(
             <View style = { styles.container }>
                 <View style={styles.selectWrapper}>
-                    <Button style={styles.cityBtn} title={currentCity} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
+                    <Button style={styles.cityBtn} title={this.props.user.locationCity.name} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
                     <SearchBar containerStyle={styles.searchBarWrapper}
                         onChangeText={this.inputChange}
                         placeholder='小区/写字楼/学校 等'
@@ -109,7 +112,6 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         backgroundColor:'#ffffff'
-        // alignItems:center;
     },
     selectWrapper:{
         flex:1,
@@ -147,7 +149,6 @@ const styles = StyleSheet.create({
     addressContact:{
         flex: 1,
         flexDirection:'row',
-        
     },
     addressMobile:{
         color:'rgba(0, 0, 0,0.7)',
@@ -168,4 +169,14 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Location;
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateUserCity: bindActionCreators(updateUserCity, dispatch),
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Location);

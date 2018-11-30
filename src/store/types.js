@@ -1,3 +1,3 @@
-export const INCREASE = 'INCREASE';
-export const DECREASE = 'DECREASE';
-export const RESET = 'RESET';
+//user.js
+export const UPDATEUSERCITY = 'UPDATEUSERCITY'
+export const UPDATEUSERADDRESS = 'UPDATEUSERADDRESS'
