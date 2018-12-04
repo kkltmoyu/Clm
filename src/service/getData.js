@@ -12,3 +12,7 @@ export const getCitiesByChar = () =>{
 export const getHotCities = () =>{
 	return fetch('city/hotCities')
 }
+
+export const searchDestination = () =>{
+	return fetch('address/inputList')
+}

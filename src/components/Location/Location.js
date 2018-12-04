@@ -4,6 +4,7 @@ import {
     View,
     StyleSheet,
     ScrollView,
+    TextInput,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
@@ -45,10 +46,11 @@ class Location extends Component {
             addressList:address
         })
     }
-    inputChange = (value) =>{
-        this.setState({
-            inputDetailAddress:value
-        })
+    focusChange = (value) =>{
+        this.props.navigation.navigate('ChooseAddress')
+        // this.setState({
+        //     inputDetailAddress:value
+        // })
     }
     getCitySketch = () =>{
         locateSketchy().then((res) => {
@@ -88,10 +90,10 @@ class Location extends Component {
             <View style = { styles.container }>
                 <View style={styles.selectWrapper}>
                     <Button style={styles.cityBtn} title={this.props.user.locationCity.name} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
-                    <SearchBar containerStyle={styles.searchBarWrapper}
-                        onChangeText={this.inputChange}
+                    <TextInput style={styles.searchBarWrapper}
+                        onFocus={this.focusChange}
                         placeholder='小区/写字楼/学校 等'
-                        value={this.state.inputDetailAddress} />
+                        value={this.state.inputDetailAddress}/>
                 </View>
                 <View style={styles.currentLocationWrapper}>
                     <Text style={styles.title}>当前定位</Text>
@@ -126,6 +128,8 @@ const styles = StyleSheet.create({
     },
     searchBarWrapper:{
         flex:4,
+        borderColor:'#EEEEE0',
+        borderWidth:1,
     },
     currentLocationWrapper:{
         flex:0.7,

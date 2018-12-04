@@ -3,38 +3,57 @@ import {
     Text,
     View,
     StyleSheet,
-    SectionList,
+    FlatList,
+    TextInput
 } from 'react-native';
 import { Button,SearchBar } from 'react-native-elements'
 import { getCitiesByChar } from '../../service/getData'
+import { connect } from 'react-redux';
+import { searchDestination } from '../../service/getData'
 
 class ChooseAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            keyword:''，
+            addressList:[]
         }
     }
 
     componentDidMount() {
         this.getAllCities()
     }
-    returnPage(){
+    returnPage = () =>{
         this.props.navigation.navigate('Location')
     }
 
-    getAllCities(){
-        
+    search = () =>{
+        this.searchDestination()then((res) => {
+            if(res.code === 500){
+                console.log('查询失败')
+               
+            }
+            else if(res.code === 200){
+                
+            }
+        }).catch((e)=>{
+            console.log('获取当前城市失败')
+            
+        })
     }
 
     render() {
         return(
             <View style = { styles.chooseAddressContainer }>
                 <View style={styles.header}>
-                    <SearchBar containerStyle={styles.searchBarInput} placeholder='输入城市名' value={this.state.inputCity}></SearchBar>
-                    <Button style={styles.cancelBtn} title='取消' onPress={this.returnPage}/>
+                    <Button style={styles.cityBtn} title={this.props.user.locationCity.name} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
+                    <TextInput style={styles.input} placeholder='小区/写字楼/学校等' value={this.state.keyword}></TextInput>
+                    <Button style={styles.cancelBtn} title='搜索' onPress={this.search}/>
                 </View>
-                
+                <View style={styles.list}>
+                    <Text>1414
+                    </Text>
+                </View>
             </View>
         );
     }
@@ -45,6 +64,35 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#ffffff',
     },
+    header:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent:'center',
+        paddingTop:10,
+        
+    },
+    cityBtn:{
+        flex:1,
+    },
+    input:{
+        flex:5,
+        height:45,
+        borderColor:'#EEEEE0',
+        borderWidth:1,
+    },
+    cancelBtn:{
+        flex:1,
+        color:'#50bfff',
+    },
+    list:{
+        flex:8,
+        paddingLeft:10,
+        paddingTop:10
+    }
 })
 
-export default ChooseAddress;
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps)(ChooseAddress);
