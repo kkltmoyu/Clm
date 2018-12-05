@@ -10,12 +10,13 @@ import { Button,SearchBar } from 'react-native-elements'
 import { getCitiesByChar } from '../../service/getData'
 import { connect } from 'react-redux';
 import { searchDestination } from '../../service/getData'
+import AddressItem from './AddressItem'
 
 class ChooseAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyword:''，
+            keyword:'',
             addressList:[]
         }
     }
@@ -28,7 +29,7 @@ class ChooseAddress extends Component {
     }
 
     search = () =>{
-        this.searchDestination()then((res) => {
+        searchDestination().then((res) => {
             if(res.code === 500){
                 console.log('查询失败')
                
@@ -41,6 +42,14 @@ class ChooseAddress extends Component {
             
         })
     }
+    _keyExtractor = (item, index) => item.id;
+    _renderItem = ({item}) => (
+        <AddressItem
+          id={item.id}
+          onPressItem={this._onPressItem}
+          title={item.title}
+        />
+      );
 
     render() {
         return(
@@ -51,8 +60,11 @@ class ChooseAddress extends Component {
                     <Button style={styles.cancelBtn} title='搜索' onPress={this.search}/>
                 </View>
                 <View style={styles.list}>
-                    <Text>1414
-                    </Text>
+                    <FlatList
+                        data={[{key: 'a'}, {key: 'b'}]}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={this._renderItem}
+                    />
                 </View>
             </View>
         );

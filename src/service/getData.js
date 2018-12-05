@@ -14,5 +14,5 @@ export const getHotCities = () =>{
 }
 
 export const searchDestination = () =>{
-	return fetch('address/inputList')
+	return fetch('city/addressFill')
 }
