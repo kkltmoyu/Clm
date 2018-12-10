@@ -24,7 +24,6 @@ class Location extends Component {
         this.state = {
             currentCityInfo : {},
             inputDetailAddress:'',
-            currentAddress:'currentcurrentAddress',
             addressList:[]
         }
     }
@@ -93,11 +92,16 @@ class Location extends Component {
                     <TextInput style={styles.searchBarWrapper}
                         onFocus={this.focusChange}
                         placeholder='小区/写字楼/学校 等'
-                        value={this.state.inputDetailAddress}/>
+                        value={this.props.user.currentDetailAddress.name}/>
                 </View>
                 <View style={styles.currentLocationWrapper}>
                     <Text style={styles.title}>当前定位</Text>
-                    <Text style={styles.currentPosition}>{this.state.currentAddress}</Text>
+                    <View style={styles.currentLocation}>
+                        <Text style={styles.city}>{this.props.user.currentDetailAddress.city}</Text>
+                        <Text style={styles.district}>{this.props.user.currentDetailAddress.district}</Text>
+                        <Text style={styles.detail}>{this.props.user.currentDetailAddress.name}</Text>
+                    </View>
+                    
                 </View>
                 <View style={styles.addressList}>
                     <Text style={styles.title}>收货地址</Text>
@@ -139,6 +143,11 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
         justifyContent:'space-around',
     },
+    currentLocation:{
+        paddingLeft:10,
+        paddingRight:10,
+        flexDirection:'row'
+    },
     addressList:{
         flex:5,
         paddingLeft:10,
@@ -146,6 +155,15 @@ const styles = StyleSheet.create({
     },
     title:{
         color:'rgb(241, 243, 244)',
+    },
+    city:{
+        flex:1,
+    },
+    district:{
+        flex:1,
+    },
+    detail:{
+        flex:3
     },
     addressTitle:{
         fontWeight:'bold'
@@ -160,9 +178,6 @@ const styles = StyleSheet.create({
     },
     addressUsername:{
         color:'rgba(0, 0, 0,0.7)',
-    },
-    currentPosition:{
-        paddingLeft:10
     },
     listContainer:{
         paddingTop:5,

@@ -10,13 +10,15 @@ import { Button,SearchBar } from 'react-native-elements'
 import { getCitiesByChar } from '../../service/getData'
 import { connect } from 'react-redux';
 import { searchDestination } from '../../service/getData'
+import { updateUserAddress } from '../../store/actions/actions';
 import AddressItem from './AddressItem'
+import { bindActionCreators } from 'redux'
 
 class ChooseAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyword:'广安门',
+            keyword:'王府井',
             addressList:[]
         }
     }
@@ -59,14 +61,28 @@ class ChooseAddress extends Component {
         />
       );
     _onPressItem = (item) => {
-        console.log('item is ',item)
+        this.props.updateUserAddress({
+            address:item
+        });
+        this.props.navigation.navigate('Location')
+        this.setState({
+            keyword:''
+        })
+    }
+    textChange = (text) =>{
+        this.setState({
+            keyword:text
+        })    
+    }
+    chooseCity = () => {
+        this.props.navigation.navigate('ChooseCity')
     }
     render() {
         return(
             <View style = { styles.chooseAddressContainer }>
                 <View style={styles.header}>
                     <Button style={styles.cityBtn} title={this.props.user.locationCity.name} rightIcon={{name: 'arrow-drop-down'}} onPress={this.chooseCity}/>
-                    <TextInput style={styles.input} placeholder='小区/写字楼/学校等' value={this.state.keyword}></TextInput>
+                    <TextInput style={styles.input} placeholder='小区/写字楼/学校等' onChangeText={this.textChange} value={this.state.keyword}></TextInput>
                     <Button style={styles.cancelBtn} title='搜索' onPress={this.search}/>
                 </View>
                 <View style={styles.list}>
@@ -91,7 +107,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'center',
         paddingTop:10,
-        
     },
     cityBtn:{
         flex:1,
@@ -109,7 +124,8 @@ const styles = StyleSheet.create({
     list:{
         flex:8,
         paddingLeft:10,
-        paddingTop:10
+        paddingTop:10,
+        paddingRight:10
     }
 })
 
@@ -117,4 +133,10 @@ const mapStateToProps = state => ({
     user: state.user
 })
 
-export default connect(mapStateToProps)(ChooseAddress);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateUserAddress: bindActionCreators(updateUserAddress, dispatch),
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ChooseAddress);
