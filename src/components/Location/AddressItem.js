@@ -3,22 +3,31 @@ import {
     Text,
     View,
     StyleSheet,
-    TextInput
+    TouchableOpacity
 } from 'react-native';
 
 class AddressItem extends React.PureComponent {
   _onPress = () => {
-    this.props.onPressItem(this.props.id);
+    this.props.onPressItem(this.props.item);
   };
 
   render() {
-    const textColor = this.props.selected ? "red" : "black";
     return (
       <TouchableOpacity onPress={this._onPress}>
-        <View>
-          <Text style={{ color: textColor }}>
-            {this.props.title}
-          </Text>
+        <View style={ styles.addressItemContainer }>
+          <View style={styles.summary}>
+            <Text style={styles.city}>
+              {this.props.item.city}
+            </Text>
+            <Text style={styles.district}>
+              {this.props.item.district}
+            </Text>
+          </View>
+          <View style={styles.detail}>
+            <Text>
+              {this.props.item.name}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -26,10 +35,33 @@ class AddressItem extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-    chooseAddressContainer:{
-        flex: 1,
-        backgroundColor:'#ffffff',
+    addressItemContainer:{
+      paddingTop:5,
+      paddingLeft:10,
+      paddingRight:10,
+      flex: 1,
+      backgroundColor:'#ffffff',
     },
+    summary:{
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-around',
+        // justifyContent:'space-between',
+    },
+    city:{
+      flex:1,
+      fontSize:12,
+    },
+    district:{
+      flex:1,
+      fontSize:12,
+      textAlign:'right',
+    },
+    detail:{
+      marginTop:5,
+      fontSize:14,
+    }
 })
 
 export default AddressItem

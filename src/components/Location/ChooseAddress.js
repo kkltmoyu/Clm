@@ -16,41 +16,51 @@ class ChooseAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyword:'',
+            keyword:'广安门',
             addressList:[]
         }
     }
 
     componentDidMount() {
-        this.getAllCities()
+        // this.getAllCities()
     }
     returnPage = () =>{
         this.props.navigation.navigate('Location')
     }
 
     search = () =>{
-        searchDestination().then((res) => {
+        let params = ''
+        if(this.props.user.locationCity.name.trim() !== '')
+            params += 'region=' + this.props.user.locationCity.name + '&city_limit=true'
+
+        if(this.state.keyword.trim()!== ''){
+            params += '&query=' + this.state.keyword.trim()
+        }
+        
+        searchDestination(params).then((res) => {
             if(res.code === 500){
                 console.log('查询失败')
-               
             }
             else if(res.code === 200){
-                
+                this.setState({
+                    addressList: res.data.addressList
+                })
             }
         }).catch((e)=>{
-            console.log('获取当前城市失败')
+            console.log('获取当前地址列表')
             
         })
     }
     _keyExtractor = (item, index) => item.id;
     _renderItem = ({item}) => (
         <AddressItem
-          id={item.id}
+          item={item}
           onPressItem={this._onPressItem}
-          title={item.title}
         />
       );
-
+    _onPressItem = (item) => {
+        console.log('item is ',item)
+    }
     render() {
         return(
             <View style = { styles.chooseAddressContainer }>
@@ -61,7 +71,7 @@ class ChooseAddress extends Component {
                 </View>
                 <View style={styles.list}>
                     <FlatList
-                        data={[{key: 'a'}, {key: 'b'}]}
+                        data={this.state.addressList}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem}
                     />
